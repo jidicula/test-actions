@@ -1,8 +1,10 @@
 on: push
 
 jobs:
-  one:
+  make_artifact:
     runs-on: ${{ matrix.os }}
+    env:
+      ARTIFACT_NAME: 'spam-${{ runner.os }}.zip'
     strategy:
       matrix:
         os:
@@ -24,3 +26,7 @@ jobs:
         run: touch "./$OS_FILENAME"
       - name: List created file
         run: ls -l "./$OS_FILENAME"
+      - name: Create artifact
+        run: touch "./$ARTIFACT_NAME"
+      - name: List artifact
+        run: ls -l "./$ARTIFACT_NAME"
