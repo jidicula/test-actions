@@ -8,6 +8,9 @@ jobs:
   build:
     name: Upload Release Asset
     runs-on: ubuntu-latest
+    outputs:
+      sha8: ${{steps.short_sha.outputs.sha8}}
+      short-sha: ${{steps.short_sha.outputs.short_sha}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -16,7 +19,9 @@ jobs:
         # the first 8 chars of the commit SHA:
       - name: Get short SHA
         id: short_sha
-        run: echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
+        run: |
+          echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
+          echo "::set-output name=short_sha::$(echo ${GITHUB_SHA} | cut -c1-8)"
 
       - name: Build project # This would actually build your project, using zip for your example date artifact
         run:  |
@@ -45,3 +50,14 @@ jobs:
           asset_path: ./app.zip
           asset_name: app.zip
           asset_content_type: application/zip
+  post-build:
+    runs-on: ubuntu-latest
+    needs:
+      - build.outputs.sha8
+      - build.outputs.short-sha
+    if: startsWith(build.outputs.sha8, build.outputs.short-sha)
+    steps:
+      - name: echo previous job's output
+        run: |
+          echo sha8-${{build.outputs.sha8}}
+          echo short_sha-${{build.outputs.short-sha}}
