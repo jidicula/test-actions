@@ -12,12 +12,14 @@ jobs:
           # - 'windows-latest'
           # - 'macos-latest'
     steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
       - name: Cache Poetry
         id: cache-poetry
         uses: actions/cache@v2
         with:
           path: $HOME/.poetry   #
-          key: ${{ runner.os}}-${{ hashFiles('.github/workflows/main.yml') }}
+          key: poetry-${{ hashFiles('.github/workflows/main.yml') }}
       - name: Install latest version of Poetry
         if: steps.cache-poetry.outputs.cache-hit != 'true'
         run: |
