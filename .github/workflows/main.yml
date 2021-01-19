@@ -7,8 +7,8 @@ jobs:
       matrix:
         os:
           - 'ubuntu-latest'
-          - 'windows-latest'
-          - 'macos-latest'
+          # - 'windows-latest'
+          # - 'macos-latest'
     steps:
       - name: write to env var
         run: echo 'bar="foo"' >> "$GITHUB_ENV"
