@@ -3,8 +3,6 @@ on: push
 jobs:
   make_artifact:
     runs-on: ${{ matrix.os }}
-    env:
-      ARTIFACT_NAME: 'spam-${{ runner.os }}.zip'
     strategy:
       matrix:
         os:
