@@ -12,6 +12,8 @@ jobs:
           # - 'windows-latest'
           # - 'macos-latest'
     steps:
+      - name: echo $HOME
+        run: echo $HOME
       - name: write to env var
         run: echo 'bar="foo"' >> "$GITHUB_ENV"
 
