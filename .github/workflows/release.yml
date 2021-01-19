@@ -21,7 +21,7 @@ jobs:
         id: short_sha
         run: |
           echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
-          echo "::set-output name=short_sha::$(echo ${GITHUB_SHA} | cut -c1-8)"
+          echo "::set-output name=short_sha::$(echo blah)"
 
       - name: Build project # This would actually build your project, using zip for your example date artifact
         run:  |
@@ -53,7 +53,7 @@ jobs:
   post-build:
     runs-on: ubuntu-latest
     needs: build
-    if: startsWith(needs.build.outputs.sha8, needs.build.outputs.short-sha)
+    if: !startsWith(needs.build.outputs.sha8, needs.build.outputs.short-sha)
     steps:
       - name: echo previous job's output
         run: |
