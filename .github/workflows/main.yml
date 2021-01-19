@@ -12,29 +12,14 @@ jobs:
           # - 'windows-latest'
           # - 'macos-latest'
     steps:
-      - name: echo $HOME
-        run: echo $HOME
-      - name: write to env var
-        run: echo 'bar="foo"' >> "$GITHUB_ENV"
-
-      - name: echo env var
-        run: echo "$bar"
-
-      - name: Dump runner context
-        env:
-          RUNNER_CONTEXT: ${{ toJson(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-      - name: Get runner OS
-        env:
-          RUNNER_OS: ${{ runner.os }}
-        run: echo "$RUNNER_OS"
-      - name: Create file with runner OS in name
-        env:
-          OS_FILENAME: 'spam-${{ runner.os }}.zip'
-        run: touch "./$OS_FILENAME"
-      - name: List created file
-        run: ls -l "./$OS_FILENAME"
-      - name: Create artifact
-        run: touch "./$ARTIFACT_NAME"
-      - name: List artifact
-        run: ls -l "./$ARTIFACT_NAME"
+      - name: Cache Poetry
+        id: cache-poetry
+        uses: actions/cache@v2
+        with:
+          path: ~/.poetry
+          key: ${{hashFiles('~/.poetry**')}}
+      - name: Install latest version of Poetry
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
+        run: |
+          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
