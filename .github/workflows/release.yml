@@ -1,0 +1,75 @@
+# Workflow only runs on push to master containing changes to pyproject.toml
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'pyproject.toml'
+
+jobs:
+  check-version-match:
+    runs-on: 'ubuntu-latest'
+    outputs:
+      release-tag-version: ${{steps.release-tag-version.outputs.release_tag_version}}
+      pyproject-version: ${{steps.pyproject-version.outputs.pyproject_version}}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+      - name: Cache Poetry
+        id: cache-poetry
+        uses: actions/cache@v2
+        with:
+          path: ~/.poetry
+          key: poetry
+      - name: Install latest version of Poetry
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
+        run: |
+          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+      - name: Add Poetry to $PATH
+        run: |
+          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+
+      - name: Output previous release tag version
+        id: release-tag-version
+        run: echo "::set-output name=release_tag_version::$(git describe --abbrev=0 --tags | sed 's/v//')"
+      - name: Output pyproject.toml version
+        id: pyproject-version
+        run: echo "::set-output name=pyproject_version::$(poetry version | sed 's/dndcareers //')"
+
+  autorelease:
+    runs-on: 'ubuntu-latest'
+    needs: check-version-match
+    # if check-version-match.release-tag-version doesn't match
+    # check-version-match.pyproject-version, run `autorelease` job.
+    if: ${{!startsWith(needs.check-version-match.outputs.release-tag-version, needs.check-version-match.outputs.pyproject-version)}}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Release Notes
+        run:
+          # Append all commit titles and authors since last tag until current
+          # commit into the release template. This change is NOT committed,
+          # and is only used for generating the release draft body in the next
+          # step of this workflow job.
+          git log $(git describe HEAD --tags --abbrev=0)..HEAD --pretty='format:* %h %s%n  * %an <%ae>' >> ".github/RELEASE_TEMPLATE.md"
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          # Name the release and tag after the version in pyproject.toml .
+          tag_name: ${{needs.check-version-match.outputs.pyproject-version}}
+          release_name: Release v${{needs.check-version-match.outputs.pyproject-version}}
+          body_path: '.github/RELEASE_TEMPLATE.md'
+          draft: true
+          prerelease: false
