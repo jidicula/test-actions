@@ -1,5 +1,5 @@
-on:
-  push:
+
+  push:.github/workflows/main.yml
   workflow_dispatch:
 
 jobs:
