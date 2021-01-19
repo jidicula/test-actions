@@ -19,7 +19,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.poetry
-          key: poetry-${{ hashFiles('.github/workflows/main.yml') }}
+          key: poetry
       - name: Install latest version of Poetry
         if: steps.cache-poetry.outputs.cache-hit != 'true'
         run: |
