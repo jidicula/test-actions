@@ -12,6 +12,12 @@ jobs:
           - 'windows-latest'
           - 'macos-latest'
     steps:
+      - name: write to env var
+        run: echo 'bar="foo"' >> "$GITHUB_ENV"
+
+      - name: echo env var
+        run: echo "$bar"
+
       - name: Dump runner context
         env:
           RUNNER_CONTEXT: ${{ toJson(runner) }}
