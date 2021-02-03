@@ -1,6 +1,12 @@
 on:
-  push:
+  # push:
     # Runs on every pushed commit
+  workflow_dispatch:
+    inputs:
+      git-sha:
+        description: Release SHA
+        default: ${{ github.sha }}
+        required: true
 
 name: Upload Release Asset
 
@@ -14,6 +20,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Get input SHA
+        env:
+          SHA: ${{ github.event.inputs.git-sha }}
+        run: echo "SHA $SHA"
 
         # For the sake of simplicity, we'll name the tag and the release with
         # the first 8 chars of the commit SHA:
