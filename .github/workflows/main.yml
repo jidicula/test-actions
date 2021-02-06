@@ -8,9 +8,9 @@ jobs:
     steps:
       - name: generate output
         id: generate-output
-        run: echo "::set-output name=foo1-output::$(echo 0)"
+        run: echo "::set-output name=bar-output::$(echo 0)"
     outputs:
-      foo1-output: ${{ steps.generate-output.outputs.foo1-output }}
+      foo1-output: ${{ steps.generate-output.outputs.bar-output }}
   foo2:
     needs: foo1
     runs-on: ubuntu-latest
@@ -18,5 +18,5 @@ jobs:
     steps:
       - name: print foo1 output
         env:
-          foo1_OUTPUT: ${{ needs.generate-output.outputs.foo1-output }}
+          foo1_OUTPUT: ${{ needs.generate-output.outputs.bar-output }}
         run: echo "$foo1_OUTPUT"
