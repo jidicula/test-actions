@@ -1,31 +1,20 @@
 on:
-  # push:
+  push:
   workflow_dispatch:
 
 jobs:
-  make_artifact:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - 'ubuntu-latest'
-          # - 'windows-latest'
-          # - 'macos-latest'
+  foo1:
+    runs-on: ubuntu-latest
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v2
-      - name: Cache Poetry
-        id: cache-poetry
-        uses: actions/cache@v2
-        with:
-          path: ~/.poetry
-          key: poetry
-      - name: Install latest version of Poetry
-        if: steps.cache-poetry.outputs.cache-hit != 'true'
-        run: |
-          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-      - name: Always add Poetry to PATH
-        run: |
-          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
-      - name: Check poetry version
-        run: poetry --version
+      - name: generate output
+        id: generate-output
+        run: echo "::set-output name=bar_output::$(echo hello)"
+    outputs:
+      foo1-output: ${{ steps.generate-output.outputs.bar_output }}
+  foo2:
+    needs: foo1
+    runs-on: ubuntu-latest
+    if: ${{ startsWith( 'hello', needs.generate-output.outputs.foo1-output) }}
+    steps:
+      - name: print success
+        run: echo "success"
