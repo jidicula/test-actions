@@ -8,13 +8,13 @@ jobs:
     steps:
       - name: generate output
         id: generate-output
-        run: echo "::set-output name=bar-output::$(echo 0)"
+        run: echo "::set-output name=bar-output::$(echo 1)"
     outputs:
       foo1-output: ${{ steps.generate-output.outputs.bar-output }}
   foo2:
     needs: foo1
     runs-on: ubuntu-latest
-    # if: ${{ needs.generate-output.outputs.foo1-output != 0 }}
+    if: ${{ needs.generate-output.outputs.foo1-output != 0 }}
     steps:
       - name: print foo1 output
         env:
