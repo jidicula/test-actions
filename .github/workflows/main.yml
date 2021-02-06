@@ -17,4 +17,4 @@ jobs:
     if: ${{ startsWith( 'hello', needs.generate-output.outputs.foo1-output) }}
     steps:
       - name: print success
-        run: echo ${{ needs.generate-output.outputs.foo1-output }}
+        run: echo "success"
