@@ -14,7 +14,9 @@ jobs:
   foo2:
     needs: foo1
     runs-on: ubuntu-latest
-    if: ${{ needs.generate-output.outputs.foo1-output != 0 }}
+    # if: ${{ needs.generate-output.outputs.foo1-output != 0 }}
     steps:
-      - name: print success
-        run: echo "success"
+      - name: print foo1 output
+        env:
+          foo1_OUTPUT: ${{ needs.generate-output.outputs.foo1-output }}
+        run: echo "$foo1_OUTPUT"
