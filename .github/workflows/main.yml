@@ -18,5 +18,5 @@ jobs:
     steps:
       - name: print foo1 output
         env:
-          foo1_OUTPUT: ${{ needs.foo1.outputs.bar-output }}
+          foo1_OUTPUT: ${{ needs.foo1.outputs.foo1-output }}
         run: echo "$foo1_OUTPUT"
