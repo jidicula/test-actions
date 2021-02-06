@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: generate output
         id: generate-output
-        run: echo "::set-output name=foo1-output::$(echo 1)"
+        run: echo "::set-output name=foo1-output::$(echo 0)"
     outputs:
       foo1-output: ${{ steps.generate-output.outputs.foo1-output }}
   foo2:
