@@ -3,19 +3,14 @@ on:
 
 jobs:
   foo1:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os[0] }}
+    strategy:
+      matrix:
+        os: [[ubuntu-20.04, 3.8], [ubuntu-18.04, 3.7]]
     steps:
-      - name: generate output
-        id: generate-output
-        run: echo "::set-output name=bar-output::$(echo 1)"
-    outputs:
-      foo1-output: ${{ steps.generate-output.outputs.bar-output }}
-  foo2:
-    needs: foo1
-    runs-on: ubuntu-latest
-    if: ${{ needs.foo1.outputs.foo1-output != 0 }}
-    steps:
-      - name: print foo1 output
-        env:
-          foo1_OUTPUT: ${{ needs.foo1.outputs.foo1-output }}
-        run: echo "$foo1_OUTPUT"
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.os[1] }}
+      - name: Print Python Version
+        run: python --version
