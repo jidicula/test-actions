@@ -14,3 +14,4 @@ jobs:
           python-version: ${{ matrix.os[1] }}
       - name: Print Python Version
         run: python --version
+      - run: pwd
