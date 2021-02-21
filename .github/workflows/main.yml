@@ -8,4 +8,5 @@ jobs:
       matrix:
         os: [macos-latest]
     steps:
+      - uses: actions/checkout@v2
       - run: pwd
