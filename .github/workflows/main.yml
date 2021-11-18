@@ -21,6 +21,8 @@ jobs:
       - name: Create file with runner OS in name
         env:
           OS_FILENAME: 'spam-${{ runner.os }}.zip'
-        run: touch "./$OS_FILENAME"
+        run: |
+          touch "./$OS_FILENAME"
+          touch blah.txt
       - name: List created file
         run: ls -l "./$OS_FILENAME"
