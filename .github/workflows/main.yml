@@ -26,4 +26,4 @@ jobs:
           touch "./${{ env.OS_FILENAME }}"
           touch blah.txt
       - name: List created file
-        run: ls -l "./${{ OS_FILENAME }}"
+        run: ls -l "./${{ env.OS_FILENAME }}"
