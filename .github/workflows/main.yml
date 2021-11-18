@@ -23,7 +23,7 @@ jobs:
           OS_FILENAME: 'spam-${{ runner.os }}.zip'
         run: |
           echo "OS_FILENAME=spam-${{ runner.os }}.zip" >> $GITHUB_ENV
-          touch "./$OS_FILENAME"
+          touch "./${{ env.OS_FILENAME }}"
           touch blah.txt
       - name: List created file
-        run: ls -l "./$OS_FILENAME"
+        run: ls -l "./${{ OS_FILENAME }}"
