@@ -27,3 +27,4 @@ jobs:
           touch blah.txt
       - name: List created file
         run: ls -l "./${{ env.OS_FILENAME }}"
+      - run: arch
