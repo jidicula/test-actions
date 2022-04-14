@@ -5,7 +5,7 @@ on:
     inputs:
       git-sha:
         description: Release SHA
-        default: ${{ env.GITHUB_SHA }}
+        default: ${{ github.sha }}
         required: true
 
 name: Upload Release Asset
