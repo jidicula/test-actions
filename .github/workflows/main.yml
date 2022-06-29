@@ -8,5 +8,3 @@ jobs:
         run: |
           FOO=$(echo "this is FOO")
           echo $FOO
-          echo "BAR=$(echo "this is BAR")" >> $GITHUB_ENV
-          echo $BAR
