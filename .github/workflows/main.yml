@@ -2,34 +2,11 @@ on: push
 
 jobs:
   one:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - 'ubuntu-latest'
-          - 'windows-latest'
-          - 'macos-latest'
+    runs-on: 'ubuntu-latest'
     steps:
-      - name: Dump runner context
-        env:
-          RUNNER_CONTEXT: ${{ toJson(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-      - name: Get runner OS
-        env:
-          RUNNER_OS: ${{ runner.os }}
-        run: echo "$RUNNER_OS"
-      - name: Create file with runner OS in name
-        env:
-          OS_FILENAME: 'spam-${{ runner.os }}.zip'
+      - name: Write variables
         run: |
-          echo "OS_FILENAME=spam-${{ runner.os }}.zip" >> $GITHUB_ENV
-          touch "./${{ env.OS_FILENAME }}"
-          touch blah.txt
-      - name: List created file
-        run: ls -l "./${{ env.OS_FILENAME }}"
-      - run: arch
-      - run: |
-          mkdir test
-          cd test
-          echo "hello" > hello.txt
-      - run: cat hello.txt
+          FOO=$(echo "this is FOO")
+          echo $FOO
+          echo "BAR='this is BAR'" >> $GITHUB_ENV
+          echo $BAR
