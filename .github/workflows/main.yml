@@ -1,7 +1,7 @@
 on: push
 
 env:
-  FOO: job-${{ github.job }}-${{ github.run.id }}
+  FOO: job-${{ github.job }}-${{ github.run_id }}-${{ github.run_attempt }}
 
 jobs:
   one:
