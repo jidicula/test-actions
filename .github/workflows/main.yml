@@ -1,5 +1,8 @@
 on: push
 
+env:
+  FOO: job-${{ github.job }}-${{ github.run.id }}
+
 jobs:
   one:
     runs-on: 'ubuntu-latest'
