@@ -8,6 +8,8 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - name: Write variables
+        env:
+          FOO: "bar"
         run: |
           env
-          echo $TERM
+          echo "'VARIABLE=${{ env.FOO }}'"
