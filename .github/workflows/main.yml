@@ -1,16 +1,11 @@
 on: push
 
-env:
-  FOO: job-${{ github.job }}-${{ github.run_id }}-${{ github.run_attempt }}
-
 jobs:
   one:
     runs-on: 'ubuntu-latest'
     steps:
-      - name: Write variables
-        env:
-          FOO: "bar"
+      - name: Write $HOME and env.HOME to stdout
         run: |
           env
-          echo "'VARIABLE=${{ env.FOO }}'"
-          echo "home: ${{ env.HOME }} $HOME"
+          echo "home: ${{ env.HOME }}"
+          echo "home: $HOME"
