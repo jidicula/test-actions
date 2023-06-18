@@ -9,3 +9,5 @@ jobs:
           env
           echo "home: ${{ env.HOME }}"
           echo "home: $HOME"
+      - uses: actions/checkout@latest
+      - run: pwd
